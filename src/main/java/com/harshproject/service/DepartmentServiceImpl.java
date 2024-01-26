@@ -45,7 +45,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public DepartmentDTO updateDepartmentDTO(Long id, DepartmentDTO updatedDepartmentDTO) {
+    public Optional<DepartmentDTO> updateDepartmentDTO(Long id, DepartmentDTO updatedDepartmentDTO) {
         Optional<Department> existingDepartmentOptional = departmentRepository.findById(id);
 
         if (existingDepartmentOptional.isPresent()) {
@@ -53,16 +53,20 @@ public class DepartmentServiceImpl implements DepartmentService {
             BeanUtils.copyProperties(updatedDepartmentDTO, existingDepartment);
             Department updatedDepartment = departmentRepository.save(existingDepartment);
 
-            return convertToDTO(updatedDepartment);
+            return Optional.of(convertToDTO(updatedDepartment));
         } else {
-            throw new NotFoundException("Department with ID " + id + " not found");
+            // Return an empty Optional if department is not found
+            return Optional.empty();
         }
     }
+
 
     @Override
     public void deleteDepartmentDTO(Long id) {
         departmentRepository.deleteById(id);
     }
+    
+    
 
     private DepartmentDTO convertToDTO(Department department) {
         DepartmentDTO departmentDTO = new DepartmentDTO();
