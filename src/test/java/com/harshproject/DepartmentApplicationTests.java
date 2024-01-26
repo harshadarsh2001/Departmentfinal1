@@ -137,9 +137,9 @@ class DepartmentApplicationTests {
         Long departmentId = 2L;
         DepartmentDTO updatedDepartmentDTO = new DepartmentDTO(/* construct your updated department DTO */);
 
-        // Mock the service call to return null, indicating not found
+        // Mock the service call to return Optional.empty(), indicating not found
         when(departmentService.updateDepartmentDTO(anyLong(), any(DepartmentDTO.class)))
-                .thenReturn(null);
+                .thenReturn(Optional.empty());
 
         // Act
         HttpHeaders headers = new HttpHeaders();
@@ -160,6 +160,7 @@ class DepartmentApplicationTests {
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
+
     @Test
     void testDeleteDepartment() throws Exception {
         Long departmentId = 1L;
@@ -170,6 +171,7 @@ class DepartmentApplicationTests {
         verify(departmentService, times(1)).deleteDepartmentDTO(departmentId);
         verifyNoMoreInteractions(departmentService);
     }
+    
     @Test
     void updateDepartment_shouldReturnOk_whenDepartmentIsUpdatedSuccessfully() throws Exception {
         // Arrange
@@ -178,7 +180,7 @@ class DepartmentApplicationTests {
 
         // Mock the service call
         when(departmentService.updateDepartmentDTO(anyLong(), any(DepartmentDTO.class)))
-                .thenReturn(updatedDepartmentDTO);
+                .thenReturn(Optional.of(updatedDepartmentDTO));
 
         // Act & Assert
         mockMvc.perform(put("/department/{id}", departmentId)
@@ -194,15 +196,16 @@ class DepartmentApplicationTests {
         verifyNoMoreInteractions(departmentService);
     }
 
+
     @Test
     void updateDepartment_shouldReturnNotFound_whenDepartmentIsNotUpdated1() throws Exception {
         // Arrange
         Long departmentId = 2L;
         DepartmentDTO updatedDepartmentDTO = new DepartmentDTO(/* construct your updated department DTO */);
 
-        // Mock the service call to return null, indicating not found
+        // Mock the service call to return Optional.empty(), indicating not found
         when(departmentService.updateDepartmentDTO(anyLong(), any(DepartmentDTO.class)))
-                .thenReturn(null);
+                .thenReturn(Optional.empty());
 
         // Act & Assert
         mockMvc.perform(put("/department/{id}", departmentId)
@@ -213,6 +216,7 @@ class DepartmentApplicationTests {
         verify(departmentService, times(1)).updateDepartmentDTO(anyLong(), any(DepartmentDTO.class));
         verifyNoMoreInteractions(departmentService);
     }
+
 
     @Test
     void deleteDepartment_shouldReturnNoContent_whenDepartmentIsDeletedSuccessfully() throws Exception {
