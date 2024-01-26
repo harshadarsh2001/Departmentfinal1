@@ -1,3 +1,4 @@
+
 package com.harshproject.service;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface DepartmentService {
 
     DepartmentDTO saveDepartmentDTO(DepartmentDTO departmentDTO);
 
-    DepartmentDTO updateDepartmentDTO(Long id, DepartmentDTO updatedDepartmentDTO);
+    Optional<DepartmentDTO> updateDepartmentDTO(Long id, DepartmentDTO updatedDepartmentDTO);
 
     void deleteDepartmentDTO(Long id);
 }
