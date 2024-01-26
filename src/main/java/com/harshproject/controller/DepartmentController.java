@@ -52,8 +52,6 @@ public class DepartmentController {
         return departmentDTOOptional.map(departmentDTO -> new ResponseEntity<>(departmentDTO, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
-
-
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @PutMapping("/{id}")
     @Operation(summary = "Update department by ID", description = "Update a department based on its ID")
@@ -65,13 +63,9 @@ public class DepartmentController {
         HttpHeaders headers = requestEntity.getHeaders();
         logger.info("Updating department with ID {}: {}. Request Headers: {}", id, updatedDepartmentDTO, headers);
 
-        DepartmentDTO updated = departmentService.updateDepartmentDTO(id, updatedDepartmentDTO);
-        if (updated != null) {
-            return new ResponseEntity<>(updated, HttpStatus.OK);
-        } else {
-            // Return 403 Forbidden when the ID is not found for updating
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        Optional<DepartmentDTO> updated = departmentService.updateDepartmentDTO(id, updatedDepartmentDTO);
+        return updated.map(updatedDTO -> new ResponseEntity<>(updatedDTO, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
 
@@ -101,6 +95,7 @@ public class DepartmentController {
 
         return new ResponseEntity<>(savedDepartmentDTO, HttpStatus.CREATED);
     }
+   
 }
 
 
