@@ -3,6 +3,7 @@ package com.harshproject.util;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +13,43 @@ import org.springframework.mail.MailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+//import com.harshproject.schedulercomponent.SchedulerComponent;
+
 @Aspect
 @Component
 public class DepartmentEmailAspect {
 
     @Autowired
     private MailSender mailSender;
+    
+//    @Autowired
+//    private SchedulerComponent schedulerComponent;
 
     private static final Logger logger = LoggerFactory.getLogger(DepartmentEmailAspect.class);
+    
+    @Before("execution(* com.harshproject.util.SchedulerComponent.sendScheduledTaskConfirmationEmailEvery10sec())")
+    public void sendEmailForTask0() {
+        sendEmail("fake-email@example.com", "Scheduled Task Confirmation 0",
+                "The scheduled task has been executed successfully: Task Executed Every 10 sec");
+    }
+
+    @Before("execution(* com.harshproject.util.SchedulerComponent.sendScheduledTaskConfirmationEmailEvery5Seconds())")
+    public void sendEmailForTask1() {
+        sendEmail("fake-email@example.com", "Scheduled Task Confirmation 1",
+                "The scheduled task has been executed successfully: Task Executed Every 5 min");
+    }
+
+    @Before("execution(* com.harshproject.util.SchedulerComponent.sendScheduledTaskConfirmationEmailEvery30Minutes())")
+    public void sendEmailForTask2() {
+        sendEmail("fake-email@example.com", "Scheduled Task Confirmation 2",
+                "The scheduled task has been executed successfully: Task Executed Every 30 Minutes");
+    }
+
+    @Before("execution(* com.harshproject.util.SchedulerComponent.sendScheduledTaskConfirmationEmailEvery1hr())")
+    public void sendEmailForTask3() {
+        sendEmail("fake-email@example.com", "Scheduled Task Confirmation 3",
+                "The scheduled task has been executed successfully: Task Executed Every 1 hour");
+    }
 
     @AfterReturning(pointcut = "execution(* com.harshproject.controller.DepartmentController.*(..))", returning = "result")
     public void handleHttpCodes(JoinPoint joinPoint, Object result) {
@@ -31,24 +61,20 @@ public class DepartmentEmailAspect {
 
             // Add your custom logic based on HTTP status codes
             switch (statusCodeValue) {
-	            case 403:
-	                
+	            case 403:	                
 	                logger.info("HTTP 403 Not Found");
 	                sendErrorEmail(methodName, "HTTP 403 Not Found");
                 break;
 	            case 204:
-	                // Handle 200 OK
 	                logger.info("HTTP 204 OK");
 	                sendConfirmationEmail(methodName, "HTTP 204 OK");
 	                break;
             	
                 case 200:
-                    // Handle 200 OK
                     logger.info("HTTP 200 OK");
                     sendConfirmationEmail(methodName, "HTTP 200 OK");
                     break;
                 case 201:
-                    // Handle 201 Created
                     logger.info("HTTP 201 Created");
                     sendConfirmationEmail(methodName, "HTTP 201 Created");
                     break;
@@ -65,42 +91,6 @@ public class DepartmentEmailAspect {
             logger.warn("Unexpected result type: {}", result.getClass().getName());
             sendErrorEmail(methodName, "Unexpected result type: " + result.getClass().getName());
         }
-    }
-
-    @Scheduled(cron = "*/10 * * * * *")
-    public void sendScheduledTaskConfirmationEmailEvery10sec() {
-        logger.info("Displaying message every 10 sec: Scheduled Task 0");
-        String to = "fake-email@example.com";
-        String subject = "Scheduled Task Confirmation 0";
-        String text = "The scheduled task has been executed successfully: Task Executed Every 30 Minutes";
-        sendEmail(to, subject, text);
-    }
-
-    @Scheduled(cron = "0 */5 * * * *")
-    public void sendScheduledTaskConfirmationEmailEvery5Seconds() {
-        logger.info("Displaying message every 5 minutes: Scheduled Task 1");
-        String to = "fake-email@example.com";
-        String subject = "Scheduled Task Confirmation 1";
-        String text = "The scheduled task has been executed successfully: Task Executed Every 5 Seconds";
-        sendEmail(to, subject, text);
-    }
-
-    @Scheduled(cron = "0 */30 * * * *")
-    public void sendScheduledTaskConfirmationEmailEvery30Minutes() {
-        logger.info("Displaying message every 30 minutes: Scheduled Task 2");
-        String to = "fake-email@example.com";
-        String subject = "Scheduled Task Confirmation 2";
-        String text = "The scheduled task has been executed successfully: Task Executed Every 30 Minutes";
-        sendEmail(to, subject, text);
-    }
-
-    @Scheduled(cron = "0 0 */1 * * *")
-    public void sendScheduledTaskConfirmationEmailEvery1hr() {
-        logger.info("Displaying message every 1 hr: Scheduled Task 3");
-        String to = "fake-email@example.com";
-        String subject = "Scheduled Task Confirmation 3";
-        String text = "The scheduled task has been executed successfully: Task Executed Every 30 Minutes";
-        sendEmail(to, subject, text);
     }
 
     private void sendEmail(String to, String subject, String text) {
