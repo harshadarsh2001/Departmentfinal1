@@ -2,10 +2,10 @@ package com.harshproject.rabbitmq;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.harshproject.dto.DepartmentDTO;
 import com.harshproject.service.DepartmentService;
+import java.util.Optional;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 @Component
 public class Consumer {
 
@@ -60,8 +60,17 @@ public class Consumer {
 
     private void handleUpdateOperation(DepartmentDTO departmentDTO) {
         // Update the department in the database using DepartmentService
-        departmentService.updateDepartmentDTO(departmentDTO.getId(), departmentDTO);
-        System.out.println("Updated department in the database: " + departmentDTO.toString());
-        // Add your additional processing logic here if needed
+        Long departmentId = departmentDTO.getId();
+        Optional<DepartmentDTO> existingDepartment = departmentService.getDepartmentDTOById(departmentId);
+
+        if (existingDepartment.isPresent()) {
+            departmentService.updateDepartmentDTO(departmentId, departmentDTO);
+            System.out.println("Updated department in the database: " + departmentDTO.toString());
+            // Add your additional processing logic here if needed
+        } else {
+            System.out.println("Failed to update department. Department with ID " + departmentId + " not found.");
+            // Handle the case where the department with the given ID is not found
+        }
     }
+
 }
