@@ -11,6 +11,7 @@ This Spring Boot project is designed for managing department data through RESTfu
   - `filter`: Custom filters for request processing.
   - `service`: Business logic and services.
   - `config`: Configuration classes for various components.
+  - `rabbitmq`: Messaging Support.
 - `src/test/java`: Unit and integration tests.
 
 ## Prerequisites
