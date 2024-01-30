@@ -74,6 +74,22 @@ RabbitMQ integration is included for asynchronous message processing.
 - **PUT /department/{id}:** Update a department by ID.
 - **DELETE /department/{id}:** Delete a department by ID.
 
+### Email Notifications
+
+The project includes scheduled tasks that send email notifications for various activities. Email notifications are sent for tasks executed every 10 seconds, 5 minutes, 30 minutes, and 1 hour.
+
+### Custom Health Indicator
+
+A custom health indicator is implemented to check the health of the database connection. It provides insights into the status of the database and is accessible at `/actuator/health`.
+
+### Aspect-Oriented Programming (AOP) for Email Notifications
+
+Aspect-Oriented Programming is used to send email notifications based on method execution. Emails are sent for successful and error scenarios, providing insights into the execution flow.
+
+### Utilizing Spring Profiles
+
+Spring profiles are used for managing different environments. The application is configured with profiles such as `dev`, `test`, and `prod`. Adjust the `application.properties` file accordingly.
+
 ### RabbitMQ Integration
 
 - **POST /department/rabbitmq/save:** Save a new department with RabbitMQ.
