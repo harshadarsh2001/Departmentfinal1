@@ -89,7 +89,7 @@ Aspect-Oriented Programming is used to send email notifications based on method 
 
 ### Utilizing Spring Profiles
 
-Spring profiles are used for managing different environments. The application is configured with profiles such as `dev`, `test`, and `prod`. Adjust the `application.properties` file accordingly.
+Spring profiles are used for managing different environments. The application is configured with profiles such as `dev`, `test`, `rabbitmq` and `prod`. Adjust the `application.properties` file accordingly.
 
 ### RabbitMQ Integration
 
