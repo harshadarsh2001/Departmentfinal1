@@ -22,6 +22,9 @@ Ensure you have the following installed before working with the project:
 - Java Development Kit (JDK)
 - Maven
 - RabbitMQ (if using RabbitMQ for messaging)
+- MySQL Workbench
+- Postman
+- FakeSMTP Server
 
 ## Getting Started
 
@@ -31,6 +34,12 @@ Ensure you have the following installed before working with the project:
 2. File -> Import -> Existing Maven Project.
 3. Browse to the project directory and select the `pom.xml` file.
 4. Click Finish.
+
+### Database Configuration (MySQL Workbench)
+
+1. Install and open MySQL Workbench.
+2. Create a new database.
+3. Configure database connection details in `application.properties`.
 
 ### Run the Application
 
@@ -44,6 +53,14 @@ To run the project:
 Access Swagger API documentation once the application is running:
 
 [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+
+### Postman
+
+Use Postman to test the RESTful APIs. Import the provided Postman collection (`DepartmentAPI.postman_collection.json`) with sample requests for each API endpoint.
+
+### FakeSMTP Server
+
+Use FakeSMTP Server to test email notifications. Configure email settings (SMTP host and port) in `application.properties`.
 
 ## Configuration
 
