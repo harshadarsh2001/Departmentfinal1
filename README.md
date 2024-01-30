@@ -1,25 +1,21 @@
 # Department Spring Boot Project
 
-This Spring Boot project is developed using Eclipse STS and provides functionality for managing departments. It offers RESTful APIs for CRUD operations on departments and supports RabbitMQ for asynchronous message processing.
+This Spring Boot project is designed for managing department data through RESTful APIs. It supports CRUD operations on departments and includes RabbitMQ integration for asynchronous message processing.
 
-## Table of Contents
+## Project Structure
 
-- [Prerequisites](#prerequisites)
-- [Getting Started](#getting-started)
-  - [Import Project](#import-project)
-  - [Run the Application](#run-the-application)
-  - [Swagger API Documentation](#swagger-api-documentation)
-- [Configuration](#configuration)
-- [RabbitMQ Integration](#rabbitmq-integration)
-- [API Endpoints](#api-endpoints)
-- [Security](#security)
-- [Testing](#testing)
-- [Contributing](#contributing)
-- [License](#license)
+- `src/main/java/com/harshproject`: Main application code.
+  - `controller`: REST controllers handling HTTP requests.
+  - `dto`: Data Transfer Objects for data exchange.
+  - `entity`: JPA entities representing database tables.
+  - `filter`: Custom filters for request processing.
+  - `service`: Business logic and services.
+  - `config`: Configuration classes for various components.
+- `src/test/java`: Unit and integration tests.
 
 ## Prerequisites
 
-Before working with the project in Eclipse STS, ensure you have the following installed:
+Ensure you have the following installed before working with the project:
 
 - [Eclipse STS](https://spring.io/tools) (Spring Tool Suite)
 - Java Development Kit (JDK)
@@ -39,12 +35,12 @@ Before working with the project in Eclipse STS, ensure you have the following in
 
 To run the project:
 
-1. Right-click on the project.
+1. Right-click on `DepartmentSpringbootApplication` class.
 2. Run As -> Spring Boot App.
 
 ### Swagger API Documentation
 
-Once the application is running, you can access Swagger API documentation at:
+Access Swagger API documentation once the application is running:
 
 [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
@@ -52,11 +48,25 @@ Once the application is running, you can access Swagger API documentation at:
 
 The project uses `application.properties` for configuration. Customize the properties as needed for your environment.
 
+## Security
+
+Security is implemented using Spring Security and JWT (JSON Web Tokens) for user authentication and authorization.
+
+- **Security Configuration:** See `SecurityConfig` class.
+- **User Authentication:** Implemented in `AuthController` using `AuthenticationManager`.
+- **JWT Token Generation:** Handled by `JwtService` and verified by `JwtAuthFilter`.
+- **User Details:** `UserInfoUserDetailsService` loads user details.
+
 ## RabbitMQ Integration
 
-If you want to enable RabbitMQ integration for asynchronous message processing, configure the RabbitMQ properties in the `application.properties` file.
+RabbitMQ integration is included for asynchronous message processing.
+
+- **RabbitMQ Configuration:** Check `RabbitMQConfig` class.
+- **Sending Messages:** Implemented in `DepartmentController` for save and update operations.
 
 ## API Endpoints
+
+### Departments
 
 - **GET /department:** Get all departments.
 - **GET /department/{id}:** Get a department by ID.
@@ -64,13 +74,14 @@ If you want to enable RabbitMQ integration for asynchronous message processing, 
 - **PUT /department/{id}:** Update a department by ID.
 - **DELETE /department/{id}:** Delete a department by ID.
 
-For RabbitMQ integration:
+### RabbitMQ Integration
+
 - **POST /department/rabbitmq/save:** Save a new department with RabbitMQ.
 - **PUT /department/{id}/rabbitmq/update:** Update a department by ID with RabbitMQ.
 
-## Security
+## Health Check
 
-The project uses Spring Security for authentication and authorization. Adjust the security configurations in the `SecurityConfig` class.
+- **GET /actuator/health:** Health check endpoint.
 
 ## Testing
 
